@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>System Access</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+font-family:monospace;
+overflow:hidden;
+}
+
+canvas{
+position:absolute;
+top:0;
+left:0;
+}
+
+#hackbox{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+}
+
+#status{
+color:red;
+font-size:28px;
+margin-bottom:20px;
+}
+
+#progressContainer{
+width:320px;
+height:22px;
+border:2px solid red;
+margin:auto;
+}
+
+#progressBar{
+width:0%;
+height:100%;
+background:red;
+}
+
+#percent{
+color:red;
+margin-top:10px;
+font-size:18px;
+}
+
+#birthday{
+display:none;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:60px;
+color:#00ff00;
+white-space:nowrap;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div id="hackbox">
+
+<div id="status">HACKING IN PROGRESS...</div>
+
+<div id="progressContainer">
+<div id="progressBar"></div>
+</div>
+
+<div id="percent">0%</div>
+
+</div>
+
+<div id="birthday">
+🎉 HAPPY BIRTHDAY 🎉
+</div>
+
+<script>
+
+// ===== MATRIX BACKGROUND =====
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+
+for(let i=0;i<columns;i++){
+drops[i]=1;
+}
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ff00";
+ctx.font=fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+const text = letters[Math.floor(Math.random()*letters.length)];
+
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975){
+drops[i]=0;
+}
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(draw,33);
+
+
+// ===== HACK PROGRESS =====
+
+let progress = 0;
+
+let interval = setInterval(()=>{
+
+progress++;
+
+document.getElementById("progressBar").style.width = progress + "%";
+document.getElementById("percent").innerText = progress + "%";
+
+if(progress >= 100){
+
+clearInterval(interval);
+
+document.getElementById("hackbox").style.display="none";
+document.getElementById("birthday").style.display="block";
+
+}
+
+},80);
+
+</script>
+
+</body>
+</html>
